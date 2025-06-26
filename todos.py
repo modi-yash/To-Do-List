@@ -1,6 +1,26 @@
 import sys
 # Makes to_do_list file if it doesn't exist
 # Defaults to 1. Walk the Dog, 2. Buy cheese
+def add_to_do(to_do:str):
+    with open("to_do_list.txt", "a") as file:
+            file.write('\n'+sys.argv[2])
+def remove_to_do(num:int):
+    if(num<=0):
+        raise ValueError("The integer value must be greater than zero!")
+    with open("to_do_list.txt", "r") as file:
+        lines = file.readlines()
+        del lines[num]
+    with open("to_do_list.txt", "w") as file:
+        
+def print_to_do():
+    num_line = 0
+    with open("to_do_list.txt","r") as file:
+        lines = file.readlines()
+        print("Here's your ToDo list:\n")
+        for line in lines:
+            print(f"{num_line}. {line}", end="")
+            num_line+=1
+
 try:
     with open("to_do_list.txt", "x") as file:
         file.write("1. Walk the Dog\n2. Buy cheese")
@@ -12,23 +32,26 @@ except Exception as e:
 
 if len(sys.argv)==1:
     try:
-        num_line = 1
-        with open("to_do_list.txt","r") as file:
-            lines = file.readlines()
-            print("Here's your ToDo list:\n")
-            for line in lines:
-                print(f"{num_line}. {line}", end="")
-                num_line+=1
-
+        print_to_do()
     except Exception as e:
         print("An unknown error occurred:", e)
         sys.exit(1)
 elif sys.argv[1]=="add":
     try:
-        with open("to_do_list.txt", "a") as file:
-            file.write('\n'+sys.argv[2])
+        add_to_do(sys.argv[2])
     except Exception as e:
         print("An unknown error occurred:", e)
+        sys.exit(1)
+elif sys.argv[1]=="remove":
+    try:
+        remove_to_do(int(sys.argv[2]))
+    except ValueError as e:
+        print("ValueError: You need to put an integer value!", e)
+        sys.exit(1)
+    except Exception as e:
+        print("An unknown error occurred:", e)
+        sys.exit(1)
+
 
 # Remove Todo
 
